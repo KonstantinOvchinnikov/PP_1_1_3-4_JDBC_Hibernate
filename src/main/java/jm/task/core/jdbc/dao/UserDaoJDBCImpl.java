@@ -34,7 +34,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao, AutoCloseable {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("The table does not exist");
         }
 
     }
@@ -50,7 +49,6 @@ public class UserDaoJDBCImpl extends Util implements UserDao, AutoCloseable {
             System.out.printf("User с именем — %s добавлен в базу данных\n", name);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("The user cannot be added");
         }
     }
 
