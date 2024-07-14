@@ -1,15 +1,13 @@
 package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
-import jm.task.core.jdbc.service.UserServiceImpl;
 import jm.task.core.jdbc.util.Util;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
-public class UserDaoJDBCImpl extends Util implements UserDao, AutoCloseable {
+
+public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
 
     public UserDaoJDBCImpl() {
     }
@@ -20,7 +18,9 @@ public class UserDaoJDBCImpl extends Util implements UserDao, AutoCloseable {
                 "name VARCHAR(45) NOT NULL," +
                 "lastName VARCHAR(45) NOT NULL," +
                 "age INT(3) NOT NULL," +
-                "PRIMARY KEY(id))";
+                "PRIMARY KEY(id))" +
+                "DEFAULT CHARACTER SET = utf8";
+
         try (Statement statement = Util.getConnection().createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
@@ -30,8 +30,8 @@ public class UserDaoJDBCImpl extends Util implements UserDao, AutoCloseable {
 
     public void dropUsersTable() {
         String sql = "DROP TABLE IF EXISTS lesson.users";
-        try (PreparedStatement preparedStatement = Util.getConnection().prepareStatement(sql)) {
-            preparedStatement.execute();
+        try (Statement statement = Util.getConnection().createStatement()) {
+            statement.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
