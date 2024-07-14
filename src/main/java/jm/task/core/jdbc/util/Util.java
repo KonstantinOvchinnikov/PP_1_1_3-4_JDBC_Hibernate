@@ -9,12 +9,8 @@ public class Util {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "admin";
 
-    protected static Connection getConnection() {
-        try {
+    protected static Connection getConnection() throws SQLException{
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        } catch (SQLException e) {
-            System.out.println("Проблема в Util");
-        }
-        return null;
+
     }
 }
