@@ -14,25 +14,16 @@ public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
     }
 
     public void createUsersTable() {
-        String sql = "CREATE TABLE IF NOT EXISTS lesson.users(" +
-                "id INT NOT NULL AUTO_INCREMENT," +
-                "name VARCHAR(45) NOT NULL," +
-                "lastName VARCHAR(45) NOT NULL," +
-                "age INT(3) NOT NULL," +
-                "PRIMARY KEY(id))" +
-                "DEFAULT CHARACTER SET = utf8";
-
         try (Statement statement = util.getConnection().createStatement()) {
-            statement.executeUpdate(sql);
+            statement.executeUpdate(CREATE_TABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void dropUsersTable() {
-        String sql = "DROP TABLE IF EXISTS lesson.users";
         try (Statement statement = util.getConnection().createStatement()) {
-            statement.execute(sql);
+            statement.execute(DROP_TABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
