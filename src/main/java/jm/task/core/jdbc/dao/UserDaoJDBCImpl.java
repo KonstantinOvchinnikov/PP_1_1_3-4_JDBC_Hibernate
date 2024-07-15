@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
-    Util util = Util.getUTIL();
+    private final Util util = Util.getUTIL();
 
     public UserDaoJDBCImpl() {
     }
