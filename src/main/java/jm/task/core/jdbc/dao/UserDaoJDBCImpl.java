@@ -2,18 +2,26 @@ package jm.task.core.jdbc.dao;
 
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
-    private final Util util = Util.getUTIL();
+public class UserDaoJDBCImpl implements UserDao {
+    private final Util util = Util.getSingletonUtilL();
 
     public UserDaoJDBCImpl() {
     }
 
     public void createUsersTable() {
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS lesson.users(" +
+                "id INT NOT NULL AUTO_INCREMENT," +
+                "name VARCHAR(45) NOT NULL," +
+                "lastName VARCHAR(45) NOT NULL," +
+                "age INT(5) NOT NULL," +
+                "PRIMARY KEY(id))" +
+                "DEFAULT CHARACTER SET = utf8";
         try (Statement statement = util.getConnection().createStatement()) {
             statement.executeUpdate(CREATE_TABLE);
         } catch (SQLException e) {
@@ -22,6 +30,7 @@ public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
     }
 
     public void dropUsersTable() {
+        String DROP_TABLE = "DROP TABLE IF EXISTS lesson.users";
         try (Statement statement = util.getConnection().createStatement()) {
             statement.execute(DROP_TABLE);
         } catch (SQLException e) {
@@ -32,7 +41,6 @@ public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
 
     public void saveUser(String name, String lastName, byte age) {
         String sql = "INSERT INTO lesson.users(name, lastName, age) VALUES (?, ?, ?)";
-
         try (PreparedStatement preparedStatement = util.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
@@ -45,7 +53,6 @@ public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
     }
 
     public void removeUserById(long id) {
-
         String sql = "DELETE FROM lesson.users WHERE id = ?";
         try (PreparedStatement preparedStatement = util.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -53,7 +60,6 @@ public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public List<User> getAllUsers() {
@@ -76,17 +82,11 @@ public class UserDaoJDBCImpl implements UserDao, AutoCloseable {
     }
 
     public void cleanUsersTable() {
-
         String sql = "DELETE FROM lesson.users";
         try (PreparedStatement preparedStatement = util.getConnection().prepareStatement(sql)) {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void close() {
-
     }
 }

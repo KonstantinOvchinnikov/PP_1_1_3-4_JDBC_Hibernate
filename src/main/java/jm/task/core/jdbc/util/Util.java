@@ -18,10 +18,10 @@ public final class Util {
     private static final String USERNAME = "root";
     private static final String PASSWORD = "admin";
 
-    public Util() {
+    private Util() {
     }
 
-    public static Util getUTIL() {
+    public static Util getSingletonUtilL() {
         if (UTIL == null) {
             UTIL = new Util();
         }
@@ -32,7 +32,7 @@ public final class Util {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
-    public SessionFactory getSessionFactory() throws SQLException {
+    public SessionFactory getSessionFactory() {
         Properties properties = new Properties();
         properties.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
         properties.put(Environment.URL, URL);
