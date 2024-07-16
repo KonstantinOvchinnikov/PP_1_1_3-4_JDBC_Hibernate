@@ -9,10 +9,9 @@ import org.hibernate.query.Query;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
-import java.util.Queue;
 
 public class UserDaoHibernateImpl implements UserDao {
-    private final Util util = Util.getUTIL();
+    private final Util util = Util.getSingletonUtilL();
 
     public UserDaoHibernateImpl() {
     }
@@ -20,6 +19,13 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS lesson.users(" +
+                "id INT NOT NULL AUTO_INCREMENT," +
+                "name VARCHAR(45) NOT NULL," +
+                "lastName VARCHAR(45) NOT NULL," +
+                "age INT(3) NOT NULL," +
+                "PRIMARY KEY(id))" +
+                "DEFAULT CHARACTER SET = utf8";
         try (Statement statement = util.getConnection().createStatement()) {
             statement.executeUpdate(CREATE_TABLE);
         } catch (SQLException e) {
@@ -29,6 +35,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
+        String DROP_TABLE = "DROP TABLE IF EXISTS lesson.users";
         try (Statement statement = util.getConnection().createStatement()) {
             statement.execute(DROP_TABLE);
         } catch (SQLException e) {
@@ -43,8 +50,6 @@ public class UserDaoHibernateImpl implements UserDao {
             session.persist(new User(name, lastName, age));
             transaction.commit();
             System.out.printf("User с именем — %s добавлен в базу данных\n", name);
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
     }
@@ -56,9 +61,6 @@ public class UserDaoHibernateImpl implements UserDao {
             session.remove(session.get(User.class, id));
             transaction.commit();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-
         }
 
     }
@@ -68,11 +70,8 @@ public class UserDaoHibernateImpl implements UserDao {
         try (Session session = util.getSessionFactory().openSession()) {
             Query<User> query = session.createQuery("from User", User.class);
             return query.list();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
-        return null;
     }
 
     @Override
@@ -81,9 +80,7 @@ public class UserDaoHibernateImpl implements UserDao {
             Transaction transaction = session.beginTransaction();
             session.createQuery("delete from User").executeUpdate();
             transaction.commit();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
+
 }
